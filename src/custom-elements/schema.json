@@ -1,0 +1,34 @@
+{
+	"$schema": "http://json-schema.org/schema",
+	"$id": "SchematicsCustomElements",
+	"title": "Custom Elements Schema",
+	"type": "object",
+	"properties": {
+	  "manifest": {
+		"type": "string",
+		"description": "path to custom-elements-manifest.json",
+		"x-prompt": "Where is the custom-elements-manifest.json file located?"
+	  },
+	  "importPath": {
+		"type": "string",
+		"description": "path to import custom element classes from the library",
+		"x-prompt": "What is the import path for the custom element library components?"
+	  },
+	  "outDir": {
+		"type": "string",
+		"description": "path to output proxy components",
+		"x-prompt": "Where should the proxy components be generated?"
+	  },
+	  "outDirExcludePrefix": {
+		"type": "string",
+		"description": "tag name prefix to exclude from generated directory names",
+		"x-prompt": "Is there a tag name prefix that should be excluded from created directory names?"
+	  },
+	  "exclude": {
+		"type": "string",
+		"description": "custom element tag names to exclude from generation",
+		"x-prompt": "Are there any custom elements that should be excluded? (comma-separated-list of tag names)"
+	  }
+	},
+	"required": ["manifest", "importPath"]
+  }
