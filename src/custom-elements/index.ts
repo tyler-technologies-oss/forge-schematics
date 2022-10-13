@@ -14,30 +14,23 @@ import {
 import * as schema from 'custom-elements-manifest/schema';
 import { readFileSync } from 'fs';
 import { IOptions } from './options.interface';
-import { CustomElementClassDeclaration, getOutDir, isCustomElement, moduleExists, TaggedCustomElement, toFileName, toJsDocBlock } from './utils';
+import { getOutDir, isCustomElement, moduleExists, TaggedCustomElement, toFileName, toJsDocBlock } from './utils';
 
 export function customElements(options: IOptions): Rule {
   return (_tree: Tree, _context: SchematicContext) => {
 	const manifest = JSON.parse(readFileSync(options.manifest, {encoding: 'utf-8'})) as schema.Package;
-	console.log(`Found ${manifest.modules.length} modules.`);
-
-	const customElementDecs = manifest.modules.reduce((acc, module) => {
-		// also need to know if any base class isCustomElement
+	let customElementsWithTags = manifest.modules.reduce((acc, module) => {
 		acc.push(...(module.declarations?.filter(
-			(dec): dec is CustomElementClassDeclaration => isCustomElement(dec, manifest.modules)) ?? [])
+			(dec): dec is TaggedCustomElement => isCustomElement(dec, manifest.modules) && 'tagName' in dec) ?? [])
 		);
 		return acc;
-	}, [] as CustomElementClassDeclaration[]);
-	console.log(`Found ${customElementDecs.length} custom elements:`);
+	}, [] as TaggedCustomElement[]);
+	console.log(`Found ${customElementsWithTags.length} custom element(s) with tag name specified in ${manifest.modules.length} module(s).`);
 	
-	let customElementsWithTags = customElementDecs.filter((x): x is TaggedCustomElement => 'tagName' in x);
-	console.log(`${customElementsWithTags.length} out of ${customElementDecs.length} custom elements have tag names specified:`);
-
-	const excludedTagNames = options.exclude?.split(',').map(e => e.trim());
+	const excludedTagNames = options.exclude?.split(',').map(e => e.trim()).filter(e => e !== '');
 	if (excludedTagNames?.length > 0) {
-		console.log(`Excluding ${excludedTagNames.length} elements.`);
 		customElementsWithTags = customElementsWithTags.filter(ce => !excludedTagNames.includes(ce.tagName));
-		console.log(`${customElementsWithTags.length} elements remain.`);
+		console.log(`Excluding ${excludedTagNames.length} elements, ${customElementsWithTags.length} remain.`);
 	}
 
 	console.dir(customElementsWithTags.map(x => x.name));
@@ -66,7 +59,7 @@ export function customElements(options: IOptions): Rule {
 	  	},
 		{ withModules: [] as TaggedCustomElement[], withoutModules: [] as TaggedCustomElement[] }
 	);
-	  console.log(`${elementMap.withoutModules.length} elements do not have associated modules.`);
+	  console.log(`Generating modules for ${elementMap.withoutModules.length} components.`);
 	  const moduleSources = elementMap.withoutModules.map(element => apply(url('./files/module '), [
 		template({
 			...element,

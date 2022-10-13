@@ -10,7 +10,7 @@ This is used by the @tylertech/forge-angular repository to generate proxy compon
 
 ## Usage
 
-Running `ng g @tylertech/schematics:custom-elements` will prompt for
+Run `ng g @tylertech/schematics:custom-elements`.  The schematic will prompt for any parameters that are not provided.  For the most up to date list of properties, view the [schema](./schema.json).
 
 ### Basic Usage
 

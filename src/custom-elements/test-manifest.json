@@ -1,0 +1,63 @@
+{
+    "schemaVersion": "1.0.0",
+    "readme": "",
+    "modules": [
+        {
+            "kind": "javascript-module",
+            "path": "accordion/accordion.ts",
+            "declarations": [
+              {
+                "kind": "class",
+                "description": "The custom element class behind the `<forge-accordion>` web component.\n\nThis component is intended to wrap and orchestrate child expansion panels\nso that only one expansion panel is open at a time.",
+                "name": "AccordionComponent",
+                "members": [
+                  {
+                    "kind": "field",
+                    "name": "_foundation",
+                    "type": {
+                      "text": "AccordionFoundation"
+                    },
+                    "privacy": "private",
+                    "default": "new AccordionFoundation(new AccordionAdapter(this))"
+                  },
+                  {
+                    "kind": "method",
+                    "name": "initializedCallback",
+                    "privacy": "public",
+                    "return": {
+                      "type": {
+                        "text": "void"
+                      }
+                    }
+                  },
+                  {
+                    "kind": "field",
+                    "name": "panelSelector",
+                    "type": {
+                      "text": "string"
+                    },
+                    "privacy": "public",
+                    "description": "Gets/sets the selector to use for finding the child expansion panels. Defaults to searching the direct children for `<forge-expansion-panel>` elements."
+                  }
+                ],
+                "superclass": {
+                  "name": "BaseComponent",
+                  "module": "/core/base/base-component"
+                },
+                "tagName": "forge-accordion",
+                "customElement": true
+              }
+            ],
+            "exports": [
+              {
+                "kind": "js",
+                "name": "AccordionComponent",
+                "declaration": {
+                  "name": "AccordionComponent",
+                  "module": "accordion/accordion.ts"
+                }
+              }
+            ]
+        }
+    ]
+}
