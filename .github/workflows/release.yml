@@ -1,0 +1,10 @@
+build-and-release:
+    name: Build and Release
+    needs: wf-config
+    uses: tyler-technologies-oss/forge-automation-shared/.github/workflows/wf-build-release.yml@v1.0.0
+    with:
+      PRODUCTION_RELEASE: false
+      AUTO_ENABLED: false
+    secrets:
+      NPM_TOKEN: ${{ secrets.FORGE_NPM_TOKEN }}
+      CHECKOUT_TOKEN: ${{ secrets.FORGE_GITHUB_ACCESS_TOKEN }}

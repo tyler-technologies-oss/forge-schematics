@@ -1,12 +1,10 @@
 # Forge Schematics - Custom Elements
 
-This schematic generates Angular components that act as proxies to native web components, but eliminate the need to use `CUSTOM_ELEMENTS_SCHEMA`, restoring type-safety and IntelliSense to your Angular templates.
+This schematic generates Angular components that act as proxies to native web components which eliminate the need to use `CUSTOM_ELEMENTS_SCHEMA`, restoring type-safety and IntelliSense to your Angular templates.
 
-It takes a [Custom Elements Manifest](https://github.com/webcomponents/custom-elements-manifest) as an input, and assumes that the library has published TypeScript type definitions, including `HTMLElementTagNameMap` declarations.  If a library does not meet these requirements, you will need to provide the types yourself, and can use [@custom-elements-manifest/analyzer](https://www.npmjs.com/package/@custom-elements-manifest/analyzer) to generate a manifest.  Note that `tagName` must be specified in order for the proxy components to be generated.
+It takes a [Custom Elements Manifest](https://github.com/webcomponents/custom-elements-manifest) as an input,  assumes that the library has implemented the web component as a TypeScript class, and has specified `HTMLElementTagNameMap` declarations.  If a library does not meet these requirements, you will need to provide the types yourself, and can use [@custom-elements-manifest/analyzer](https://www.npmjs.com/package/@custom-elements-manifest/analyzer) to generate a manifest.  Note that `tagName` must be specified in order for the proxy components to be generated.
 
-This is used by the @tylertech/forge-angular repository to generate proxy components for @tylertech/forge.
-
-**Note:** If you have any existing `@ViewChild` references to a web component, after switching to use proxy components, ensure that either the `{ read: ElementRef }` option is specified, or the type is changed to that of the ProxyComponent.
+This is used by the @tylertech/forge-angular repository to generate proxy components for @tylertech/forge.  Version 1.0 was primarily designed around those specific libraries.  PRs are welcome to add appropriate configuration where necessary.
 
 ## Usage
 
@@ -34,8 +32,8 @@ This will generate a folder for each custom element matching the tag name in the
 After generating components and associated modules:
 -   Import relevant module(s) for all component used
 -   Remove `CUSTOM_ELEMENTS_SCHEMA`.
--   It is also no longer necessary to call `define***Component()` methods for the usages in the module.
+-   It is also no longer necessary to call `customElements.define()` as the components register themselves.
 
-If `strictTemplateChecking` is enabled, you may see errors on some bindings.  You can always wrap the value in `$any()` and they'll behave exactly as before, though these should be evaluated for correctness.  It may either reflect a gap in Forge typings (e.g. allowing `null` but not `undefined`, or not allowing nullish values when they're actually valid), or it could represent an actual issue in your code you were not aware of.  In the case of the former, fix the types, or raise an issue/submit a PR to the library that owns them.  Once these are fixed, re-run the schematic, and you should be able to remove `$any()` and restore type-safety to those bindings.
+If `strictTemplateChecking` is enabled, you may see errors on some bindings.  You can always wrap the value in `$any()` and they'll behave exactly as before, though these should be evaluated for correctness.  It may either reflect a gap in the custom element library's typings (e.g. allowing `null` but not `undefined`, or not allowing nullish values when they're actually valid), or it could represent an actual issue in your code you were not aware of.  In the case of the former, fix the types, or raise an issue/submit a PR to the library that owns them.  Once these are fixed, re-run the schematic, and you should be able to remove `$any()` and restore type-safety to those bindings.
 
 If you were previously getting an `ElementRef` reference to a web component using `@ViewChild`, ensure that the `{ read: ElementRef }` option is being passed, otherwise you'll actually be getting a reference to the wrapper component instead of an `ElementRef` and `.nativeElement` will return undefined.

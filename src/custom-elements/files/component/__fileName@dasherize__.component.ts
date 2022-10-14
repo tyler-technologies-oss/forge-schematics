@@ -42,6 +42,9 @@ export class <%= name %> {
 		protected elementRef: ElementRef<<%= name %>CustomElement>,
 		protected zone: NgZone
 	) {
+		if (!window.customElements.get('<%= tagName %>')) {
+			window.customElements.define('<%= tagName %>', <%= name %>CustomElement);
+		}
 		changeDetectorRef.detach();
 	}
 }
