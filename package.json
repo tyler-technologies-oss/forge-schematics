@@ -1,6 +1,6 @@
 {
   "name": "@tylertech/forge-schematics",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "Contains Angular Schematics relevant to working with Forge web components.",
   "repository": {
     "type": "git",
@@ -10,7 +10,9 @@
   "license": "Apache-2.0",
   "scripts": {
     "build": "tsc -p tsconfig.json",
-    "test": "npm run build && jasmine src/**/*_spec.js"
+    "test": "npm run build && jasmine src/**/*_spec.js",
+    "changelog": "auto changelog",
+    "release": "auto shipit"
   },
   "schematics": "./src/collection.json",
   "dependencies": {
@@ -20,8 +22,12 @@
     "typescript": "~4.8.1"
   },
   "devDependencies": {
+    "@auto-it/conventional-commits": "^10.37.6",
+    "@auto-it/first-time-contributor": "^10.37.6",
+    "@auto-it/npm": "^10.37.6",
     "@types/jasmine": "~4.0.0",
     "@types/node": "^14.15.0",
+    "auto": "^10.37.6",
     "custom-elements-manifest": "^1.0.0",
     "jasmine": "^4.0.0"
   }

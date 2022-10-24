@@ -20,5 +20,10 @@
     "types": ["jasmine", "node"]
   },
   "include": ["src/**/*"],
-  "exclude": ["src/*/files/**/*"]
+  "exclude": ["src/*/files/**/*"],
+  "ts-node": {
+    "compilerOptions": {
+      "rootDir": "."
+    }
+  }
 }
