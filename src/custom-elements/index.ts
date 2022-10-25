@@ -73,7 +73,8 @@ export function customElements(options: IOptions): Rule {
 
 	  return chain([
 		chain(sources.map(source => mergeWith(source, MergeStrategy.Overwrite))),
-		chain(moduleSources.map(source => mergeWith(source, MergeStrategy.Overwrite))),
+		// Use default strategy to error if file exists, switch to overwrite if we make change to detect non-generated modules only. 
+		chain(moduleSources.map(source => mergeWith(source, MergeStrategy.Default))),
 	  ] as Rule[]);
   };
 }

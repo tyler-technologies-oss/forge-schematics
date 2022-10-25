@@ -8,14 +8,14 @@ This is used by the @tylertech/forge-angular repository to generate proxy compon
 
 ## Usage
 
-Run `ng g @tylertech/schematics:custom-elements`.  The schematic will prompt for any parameters that are not provided.  For the most up to date list of properties, view the [schema](./schema.json).
+Run `ng generate @tylertech/forge-schematics:custom-elements`.  The schematic will prompt for any parameters that are not provided.  For the most up to date list of properties, view the [schema](./schema.json).
 
 ### Basic Usage
 
 At minimum, a path to the manifest and import path for types must be provided:
 
 ```sh
-ng g @tylertech/schematics:custom-elements --manifest="./node_modules/@tylertech/forge/custom-elements.json" --import-path "@tylertech/forge"
+ng g @tylertech/forge-schematics:custom-elements --manifest="./node_modules/@tylertech/forge/custom-elements.json" --import-path "@tylertech/forge"
 ```
 
 This will generate a folder for each custom element matching the tag name in the current directory, and an Angular component and module in each folder corresponding to the custom element.  If the directory already exists, and a module is present, the module will not be created and you will need to add the generated component to the `declarations` and `exports` manually.
