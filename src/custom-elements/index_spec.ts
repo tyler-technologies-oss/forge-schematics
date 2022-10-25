@@ -24,7 +24,7 @@ describe('custom-elements', () => {
     ]);
   });
 
-  it('should generate a component and module for each element in a folder matching the tag name', async () => {
+  it('should skip generating a module if one already exists in the target directory', async () => {
     const runner = new SchematicTestRunner('schematics', collectionPath);
     const startingTree = Tree.empty();
     startingTree.create('forge-accordion/accordion.module.ts', 'test');
@@ -63,7 +63,7 @@ describe('custom-elements', () => {
     ]);
   });
 
-  it('should generate omit the forge prefix from the folder if outDirExcludePrefix is specified', async () => {
+  it('should omit the forge prefix from the folder if outDirExcludePrefix is specified', async () => {
     const runner = new SchematicTestRunner('schematics', collectionPath);
     const tree = await runner
       .runSchematicAsync<IOptions>('custom-elements', { 

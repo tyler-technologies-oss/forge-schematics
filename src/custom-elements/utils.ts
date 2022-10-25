@@ -68,7 +68,9 @@ export function moduleExists(tree: Tree, targetDir: string): boolean {
 	try {
 		// TODO: Return false if foundModule is generated (could be determined by header comment) to regenerate it
 		// Ensure result is in targetDir and not a parent directory.
-		return findModule(tree, targetDir).startsWith(`/${targetDir}`);
+		const module = findModule(tree, targetDir);
+		console.log(`${module} vs ${targetDir}`);
+		return module.startsWith(targetDir.startsWith('/') ? targetDir : `/${targetDir}`);
 	} catch {
 		return false;
 	}
