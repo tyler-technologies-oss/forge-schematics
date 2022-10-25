@@ -67,7 +67,8 @@ export function toFileName(className: string): string {
 export function moduleExists(tree: Tree, targetDir: string): boolean {
 	try {
 		// TODO: Return false if foundModule is generated (could be determined by header comment) to regenerate it
-		return findModule(tree, targetDir).startsWith(targetDir);
+		// Ensure result is in targetDir and not a parent directory.
+		return findModule(tree, targetDir).startsWith(`/${targetDir}`);
 	} catch {
 		return false;
 	}
