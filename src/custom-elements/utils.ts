@@ -1,6 +1,5 @@
 
 import { Tree } from '@angular-devkit/schematics';
-import { findModule } from '@schematics/angular/utility/find-module';
 import * as schema from 'custom-elements-manifest/schema';
 import { IOptions } from './options.interface';
 
@@ -54,7 +53,7 @@ export function getOutDir(options: IOptions, tagName: string): string {
  * @param className A component class name.
  * @returns The component name without the 'Component' suffix.
  */
-export function toFileName(className: string): string {
+export function toBaseName(className: string): string {
 	return className.replace(/Component$/, '');
 }
 
@@ -65,15 +64,8 @@ export function toFileName(className: string): string {
  * @returns True if a `.module.ts` file exists in the target directory, false otherwise
  */
 export function moduleExists(tree: Tree, targetDir: string): boolean {
-	try {
-		// TODO: Return false if foundModule is generated (could be determined by header comment) to regenerate it
-		// Ensure result is in targetDir and not a parent directory.
-		const module = findModule(tree, targetDir);
-		console.log(`${module} vs ${targetDir}`);
-		return module.startsWith(targetDir.startsWith('/') ? targetDir : `/${targetDir}`);
-	} catch {
-		return false;
-	}
+	// TODO: Return false if foundModule is generated (could be determined by header comment) to regenerate it
+	return tree.getDir('/' + targetDir).subfiles.some((p) => p.endsWith('.module.ts'));
 }
 
 /**

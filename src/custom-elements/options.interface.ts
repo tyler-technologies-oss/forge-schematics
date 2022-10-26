@@ -4,4 +4,5 @@ export interface IOptions {
 	outDir: string;
 	outDirExcludePrefix: string;
 	exclude: string;
+	modulePrefix: string;
 }

@@ -14,10 +14,10 @@ import {
 import * as schema from 'custom-elements-manifest/schema';
 import { readFileSync } from 'fs';
 import { IOptions } from './options.interface';
-import { getOutDir, isCustomElement, moduleExists, TaggedCustomElement, toFileName, toJsDocBlock } from './utils';
+import { getOutDir, isCustomElement, moduleExists, TaggedCustomElement, toBaseName, toJsDocBlock } from './utils';
 
 export function customElements(options: IOptions): Rule {
-  return (_tree: Tree, _context: SchematicContext) => {
+  return (tree: Tree, context: SchematicContext) => {
 	const manifest = JSON.parse(readFileSync(options.manifest, {encoding: 'utf-8'})) as schema.Package;
 	let customElementsWithTags = manifest.modules.reduce((acc, module) => {
 		acc.push(...(module.declarations?.filter(
@@ -25,20 +25,21 @@ export function customElements(options: IOptions): Rule {
 		);
 		return acc;
 	}, [] as TaggedCustomElement[]);
-	console.log(`Found ${customElementsWithTags.length} custom element(s) with tag name specified in ${manifest.modules.length} module(s).`);
-	
+	context.logger.info(`Found ${customElementsWithTags.length} custom element(s) with tag name specified in ${manifest.modules.length} module(s).`);
+
 	const excludedTagNames = options.exclude?.split(',').map(e => e.trim()).filter(e => e !== '');
 	if (excludedTagNames?.length > 0) {
 		customElementsWithTags = customElementsWithTags.filter(ce => !excludedTagNames.includes(ce.tagName));
-		console.log(`Excluding ${excludedTagNames.length} elements, ${customElementsWithTags.length} remain.`);
+		context.logger.info(`Excluding ${excludedTagNames.length} elements, ${customElementsWithTags.length} remain.`);
 	}
 
-	console.dir(customElementsWithTags.map(x => x.name));
+	context.logger.debug(`Elements to generate components for: ${customElementsWithTags.map(x => x.tagName).toString()}`);
 
+	// TODO: Don't generate @Input for @FoundationProperty({set: false}) (not indicated by metadata)
 	const sources = customElementsWithTags.map(element => apply(url('./files/component'), [
 		template({
 			...element,
-			fileName: toFileName(element.name),
+			baseName: toBaseName(element.name),
 			importPath: options.importPath,
 			methods: element.members?.filter(x => x.kind === 'method' && x.privacy === 'public') ?? [],
 			properties: element.members?.filter(x => x.kind === 'field' && x.privacy === 'public') ?? [],
@@ -52,19 +53,24 @@ export function customElements(options: IOptions): Rule {
 
 	  const elementMap = customElementsWithTags.reduce(
 		(agg, element) => {
-			(moduleExists(_tree, getOutDir(options, element.tagName))
+			(moduleExists(tree, getOutDir(options, element.tagName))
 				? agg.withModules
 				: agg.withoutModules).push(element);
 		return agg;
 	  	},
 		{ withModules: [] as TaggedCustomElement[], withoutModules: [] as TaggedCustomElement[] }
 	);
-	  console.log(`Generating modules for ${elementMap.withoutModules.length} components.`);
+	
+	  if (elementMap.withModules.length > 0) {
+	      context.logger.debug(`Skipping module generation for existing modules: ${elementMap.withModules.map(e => e.tagName)}`);
+	  }
+	  context.logger.info(`Generating modules for ${elementMap.withoutModules.length} components.`);
 	  const moduleSources = elementMap.withoutModules.map(element => apply(url('./files/module '), [
 		template({
 			...element,
 			...strings,
-			fileName: toFileName(element.name)
+			baseName: toBaseName(element.name),
+			modulePrefix: options.modulePrefix
 		}),
 		move(getOutDir(options, element.tagName))
 	  ]));

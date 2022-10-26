@@ -28,6 +28,11 @@
 		"type": "string",
 		"description": "custom element tag names to exclude from generation",
 		"x-prompt": "Are there any custom elements that should be excluded? (comma-separated-list of tag names)"
+	  },
+	  "modulePrefix": {
+		"type": "string",
+		"description": "optional prefix for the NgModule name",
+		"x-prompt": "Is there a prefix that the exported NgModule should begin with?"
 	  }
 	},
 	"required": ["manifest", "importPath"]

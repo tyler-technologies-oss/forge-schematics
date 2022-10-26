@@ -14,7 +14,8 @@ describe('custom-elements', () => {
         importPath: '@tylertech/forge',
         exclude: '',
         outDir: '',
-        outDirExcludePrefix: ''
+        outDirExcludePrefix: '',
+        modulePrefix: ''
       }, Tree.empty())
       .toPromise();
 
@@ -34,7 +35,8 @@ describe('custom-elements', () => {
         importPath: '@tylertech/forge',
         exclude: '',
         outDir: '',
-        outDirExcludePrefix: ''
+        outDirExcludePrefix: '',
+        modulePrefix: ''
       }, startingTree)
       .toPromise();
 
@@ -53,7 +55,8 @@ describe('custom-elements', () => {
         importPath: '@tylertech/forge',
         exclude: '',
         outDir: 'test',
-        outDirExcludePrefix: ''
+        outDirExcludePrefix: '',
+        modulePrefix: ''
       }, Tree.empty())
       .toPromise();
 
@@ -71,7 +74,8 @@ describe('custom-elements', () => {
         importPath: '@tylertech/forge',
         exclude: '',
         outDir: '',
-        outDirExcludePrefix: 'forge-'
+        outDirExcludePrefix: 'forge-',
+        modulePrefix: ''
       }, Tree.empty())
       .toPromise();
 
@@ -89,7 +93,8 @@ describe('custom-elements', () => {
         importPath: '@tylertech/forge',
         exclude: 'forge-accordion',
         outDir: '',
-        outDirExcludePrefix: ''
+        outDirExcludePrefix: '',
+        modulePrefix: ''
       }, Tree.empty())
       .toPromise();
 
