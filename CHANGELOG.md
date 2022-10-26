@@ -1,3 +1,15 @@
+# v1.0.2 (Wed Oct 26 2022)
+
+#### 🐛 Bug Fix
+
+- fix: more module cleanup ([@MikeMatusz](https://github.com/MikeMatusz))
+
+#### Authors: 1
+
+- Mike Matuszak ([@MikeMatusz](https://github.com/MikeMatusz))
+
+---
+
 # v1.0.1 (Tue Oct 25 2022)
 
 #### 🐛 Bug Fix
