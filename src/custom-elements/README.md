@@ -25,7 +25,8 @@ This will generate a folder for each custom element matching the tag name in the
 * `--outDir` will generate output files and folders in the specified directory
 * `--outDirExcludePrefix` will exclude the specified prefix from tag names when generating folders (e.g. `text-field/` instead of `forge-text-field/`)
 * `--exclude` accepts a comma-delimited list of tag names and will not generate proxy components for the corresponding web components
-
+* `--modulePrefix` supplies an optional prefix for the NgModule name
+* `--useDefineFunction` will use a library-provided `define*Component()` function instead of `window.customElements.define()`
 
 ## Migration Notes
 

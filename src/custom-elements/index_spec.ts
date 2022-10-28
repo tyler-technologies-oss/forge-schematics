@@ -5,18 +5,23 @@ import { IOptions } from './options.interface';
 
 const collectionPath = path.join(__dirname, '../collection.json');
 
+function defaultOptions(): IOptions {
+  return { 
+    manifest: 'src/custom-elements/test-manifest.json',
+    importPath: '@tylertech/forge',
+    exclude: '',
+    outDir: '',
+    outDirExcludePrefix: '',
+    modulePrefix: '',
+    useDefineFunction: false
+  };
+}
+
 describe('custom-elements', () => {
   it('should generate a component and module for each element in a folder matching the tag name', async () => {
     const runner = new SchematicTestRunner('schematics', collectionPath);
     const tree = await runner
-      .runSchematicAsync<IOptions>('custom-elements', { 
-        manifest: 'src/custom-elements/test-manifest.json',
-        importPath: '@tylertech/forge',
-        exclude: '',
-        outDir: '',
-        outDirExcludePrefix: '',
-        modulePrefix: ''
-      }, Tree.empty())
+      .runSchematicAsync<IOptions>('custom-elements', defaultOptions(), Tree.empty())
       .toPromise();
 
     expect(tree.files).toEqual([
@@ -30,14 +35,7 @@ describe('custom-elements', () => {
     const startingTree = Tree.empty();
     startingTree.create('forge-accordion/accordion.module.ts', 'test');
     const tree = await runner
-      .runSchematicAsync<IOptions>('custom-elements', { 
-        manifest: 'src/custom-elements/test-manifest.json',
-        importPath: '@tylertech/forge',
-        exclude: '',
-        outDir: '',
-        outDirExcludePrefix: '',
-        modulePrefix: ''
-      }, startingTree)
+      .runSchematicAsync<IOptions>('custom-elements', defaultOptions(), startingTree)
       .toPromise();
 
     expect(tree.files).toEqual(jasmine.arrayContaining([
@@ -51,12 +49,8 @@ describe('custom-elements', () => {
     const runner = new SchematicTestRunner('schematics', collectionPath);
     const tree = await runner
       .runSchematicAsync<IOptions>('custom-elements', { 
-        manifest: 'src/custom-elements/test-manifest.json',
-        importPath: '@tylertech/forge',
-        exclude: '',
-        outDir: 'test',
-        outDirExcludePrefix: '',
-        modulePrefix: ''
+        ...defaultOptions(),
+        outDir: 'test'
       }, Tree.empty())
       .toPromise();
 
@@ -70,12 +64,8 @@ describe('custom-elements', () => {
     const runner = new SchematicTestRunner('schematics', collectionPath);
     const tree = await runner
       .runSchematicAsync<IOptions>('custom-elements', { 
-        manifest: 'src/custom-elements/test-manifest.json',
-        importPath: '@tylertech/forge',
-        exclude: '',
-        outDir: '',
+        ...defaultOptions(),
         outDirExcludePrefix: 'forge-',
-        modulePrefix: ''
       }, Tree.empty())
       .toPromise();
 
@@ -89,12 +79,8 @@ describe('custom-elements', () => {
     const runner = new SchematicTestRunner('schematics', collectionPath);
     const tree = await runner
       .runSchematicAsync<IOptions>('custom-elements', { 
-        manifest: 'src/custom-elements/test-manifest.json',
-        importPath: '@tylertech/forge',
-        exclude: 'forge-accordion',
-        outDir: '',
-        outDirExcludePrefix: '',
-        modulePrefix: ''
+        ...defaultOptions(),
+        exclude: 'forge-accordion'
       }, Tree.empty())
       .toPromise();
 

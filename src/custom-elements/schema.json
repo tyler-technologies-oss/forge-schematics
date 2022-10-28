@@ -33,6 +33,11 @@
 		"type": "string",
 		"description": "optional prefix for the NgModule name",
 		"x-prompt": "Is there a prefix that the exported NgModule should begin with?"
+	  },
+	  "useDefineFunction": {
+		"type": "boolean",
+		"description": "option to use custom define function provided by each component",
+		"x-prompt": "Do the components provide their own define function?"
 	  }
 	},
 	"required": ["manifest", "importPath"]

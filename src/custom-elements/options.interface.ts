@@ -5,4 +5,5 @@ export interface IOptions {
 	outDirExcludePrefix: string;
 	exclude: string;
 	modulePrefix: string;
+	useDefineFunction: boolean;
 }

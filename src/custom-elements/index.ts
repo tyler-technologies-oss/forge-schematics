@@ -41,6 +41,7 @@ export function customElements(options: IOptions): Rule {
 			...element,
 			baseName: toBaseName(element.name),
 			importPath: options.importPath,
+			useDefineFunction: options.useDefineFunction,
 			methods: element.members?.filter(x => x.kind === 'method' && x.privacy === 'public') ?? [],
 			properties: element.members?.filter(x => x.kind === 'field' && x.privacy === 'public') ?? [],
 			attributes: element.attributes ?? [],
