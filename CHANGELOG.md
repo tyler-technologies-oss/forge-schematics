@@ -1,3 +1,15 @@
+# v1.1.0 (Fri Oct 28 2022)
+
+#### 🚀 Enhancement
+
+- feat: add useDefineFunction option ([@MikeMatusz](https://github.com/MikeMatusz))
+
+#### Authors: 1
+
+- Mike Matuszak ([@MikeMatusz](https://github.com/MikeMatusz))
+
+---
+
 # v1.0.2 (Wed Oct 26 2022)
 
 #### 🐛 Bug Fix
