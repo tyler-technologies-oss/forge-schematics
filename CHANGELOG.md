@@ -1,3 +1,15 @@
+# v1.2.0 (Mon Mar 13 2023)
+
+#### 🐛 Bug Fix
+
+- feat: define components in module constructor [#3](https://github.com/tyler-technologies-oss/forge-schematics/pull/3) ([@MikeMatusz](https://github.com/MikeMatusz))
+
+#### Authors: 1
+
+- Mike Matuszak ([@MikeMatusz](https://github.com/MikeMatusz))
+
+---
+
 # v1.1.0 (Fri Oct 28 2022)
 
 #### 🚀 Enhancement
