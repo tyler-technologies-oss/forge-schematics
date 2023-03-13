@@ -86,4 +86,35 @@ describe('custom-elements', () => {
 
     expect(tree.files).toEqual([]);
   });
+
+  it('should use the built-in customElements.define function if useDefineFunction is false', async () => {
+    const runner = new SchematicTestRunner('schematics', collectionPath);
+    const tree = await runner
+      .runSchematicAsync<IOptions>('custom-elements', { 
+        ...defaultOptions(),
+        useDefineFunction: false
+      }, Tree.empty())
+      .toPromise();
+
+      expect(tree.readContent(tree.files[0])).toContain(`if (!window.customElements.get('forge-accordion')) {`);
+      expect(tree.readContent(tree.files[0])).toContain(`window.customElements.define('forge-accordion', AccordionComponentCustomElement);`);
+      expect(tree.readContent(tree.files[1])).toContain(`import { AccordionComponent as AccordionComponentCustomElement } from '@tylertech/forge';`);
+      expect(tree.readContent(tree.files[1])).toContain(`if (!window.customElements.get('forge-accordion')) {`);
+      expect(tree.readContent(tree.files[1])).toContain(`window.customElements.define('forge-accordion', AccordionComponentCustomElement);`);
+  });
+
+  it('should use the library define function if useDefineFunction is true', async () => {
+    const runner = new SchematicTestRunner('schematics', collectionPath);
+    const tree = await runner
+      .runSchematicAsync<IOptions>('custom-elements', { 
+        ...defaultOptions(),
+        useDefineFunction: true
+      }, Tree.empty())
+      .toPromise();
+
+      expect(tree.readContent(tree.files[0])).toContain(`, defineAccordionComponent } from '@tylertech/forge';`);
+      expect(tree.readContent(tree.files[0])).toContain(`defineAccordionComponent()`);
+      expect(tree.readContent(tree.files[1])).toContain(`import { defineAccordionComponent } from '@tylertech/forge';`);
+      expect(tree.readContent(tree.files[1])).toContain(`defineAccordionComponent()`);
+  });
 });
