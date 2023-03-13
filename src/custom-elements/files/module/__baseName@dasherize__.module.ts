@@ -8,4 +8,15 @@ import { <%= name %> } from './<%= dasherize(baseName) %>.component';
 	declarations: [<%= name %>],
 	exports: [<%= name %>]
 })
-export class <%= modulePrefix %><%= baseName %>Module {}
+export class <%= modulePrefix %><%= baseName %>Module {
+	constructor() {
+		<% if (useDefineFunction) {
+			// Forge FloatingActionButton doesn't currently have Component suffix, but define function does.
+			%>define<%= name.endsWith('Component') ? name : `${name}Component` %>();<%
+		} else {
+			%>if (!window.customElements.get('<%= tagName %>')) {
+				window.customElements.define('<%= tagName %>', <%= name %>CustomElement);
+			}<%
+		} %>
+	}
+}

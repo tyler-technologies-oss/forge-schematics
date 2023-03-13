@@ -71,7 +71,8 @@ export function customElements(options: IOptions): Rule {
 			...element,
 			...strings,
 			baseName: toBaseName(element.name),
-			modulePrefix: options.modulePrefix
+			modulePrefix: options.modulePrefix,
+			useDefineFunction: options.useDefineFunction
 		}),
 		move(getOutDir(options, element.tagName))
 	  ]));
