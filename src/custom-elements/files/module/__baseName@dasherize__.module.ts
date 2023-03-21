@@ -3,14 +3,16 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core'; <% if (useDefineFunction) { %>
 import { define<%= name.endsWith('Component') ? name : `${name}Component` %> } from '<%= importPath %>';<% } else { %>
 import { <%= name %> as <%= name %>CustomElement } from '<%= importPath %>';<% } %>
+<% for (let dependency of dependencies) { %>
+import { <%= dependency.moduleName %> } from '..<%= dependency.modulePath %>';<% } %>
 import { <%= name %> } from './<%= dasherize(baseName) %>.component';
 
 @NgModule({
-	imports: [CommonModule],
+	imports: [CommonModule<% for (let dependency of dependencies) { %>, <%= dependency.moduleName %><% } %>],
 	declarations: [<%= name %>],
-	exports: [<%= name %>]
+	exports: [<%= name %><% for (let dependency of dependencies) { %>, <%= dependency.moduleName %><% } %>]
 })
-export class <%= modulePrefix %><%= baseName %>Module {
+export class <%= moduleName %> {
 	constructor() {
 		<% if (useDefineFunction) {
 			// Forge FloatingActionButton doesn't currently have Component suffix, but define function does.
