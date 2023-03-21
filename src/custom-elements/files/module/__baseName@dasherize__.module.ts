@@ -4,7 +4,7 @@ import { NgModule } from '@angular/core'; <% if (useDefineFunction) { %>
 import { define<%= name.endsWith('Component') ? name : `${name}Component` %> } from '<%= importPath %>';<% } else { %>
 import { <%= name %> as <%= name %>CustomElement } from '<%= importPath %>';<% } %>
 <% for (let dependency of dependencies) { %>
-import { <%= dependency.moduleName %> } from '..<%= dependency.modulePath %>';<% } %>
+import { <%= dependency.moduleName %> } from '<%= dependency.relativePath %>';<% } %>
 import { <%= name %> } from './<%= dasherize(baseName) %>.component';
 
 @NgModule({

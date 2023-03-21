@@ -154,10 +154,10 @@ describe('custom-elements', () => {
       .toPromise();
 
     expect(tree.files).toEqual([
-      '/accordion/accordion.component.ts',
-      '/accordion/accordion.module.ts',
-      '/expansion-panel/expansion-panel.component.ts',
-      '/expansion-panel/expansion-panel.module.ts'
+      '/test/accordion/accordion.component.ts',
+      '/test/accordion/accordion.module.ts',
+      '/test/expansion-panel/expansion-panel.component.ts',
+      '/test/expansion-panel/expansion-panel.module.ts'
     ]);
   });
 

@@ -34,16 +34,17 @@ export function isCustomElement(declaration: schema.Declaration | undefined, mod
 
 /**
  * Processes schematic configuration to return the appropriate directory to output a generated custom element proxy.
- * @param options The schematic options
+ * @param cliOptions The schematic options
  * @param tagName The tag name of the custom element.
+ * @param options.relative Whether to generate the path relative to the base configured outDir.
  * @returns The output directory to use for the custom element proxy.
  */
-export function getOutDir(options: ICliOptions, tagName: string): string {
+export function getOutDir(cliOptions: ICliOptions, tagName: string, options?: { relative?: boolean }): string {
 	return `${
-		options.outDir ?? '.'
+		options?.relative ? '' : (cliOptions.outDir ?? '.')
 	}/${
-		options.outDirExcludePrefix
-			? tagName.replace(new RegExp(`^${options.outDirExcludePrefix}`), '')
+		cliOptions.outDirExcludePrefix
+			? tagName.replace(new RegExp(`^${cliOptions.outDirExcludePrefix}`), '')
 			: tagName
 	}`;
 }

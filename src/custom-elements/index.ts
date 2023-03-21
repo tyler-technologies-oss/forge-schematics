@@ -64,11 +64,11 @@ export function customElements(inputOptions: IOptions): Rule {
 				const hasExistingModule = moduleExists(tree, getOutDir(options, element.tagName));
 				const baseName = toBaseName(element.name);
 				const moduleName = `${options.modulePrefix}${baseName}${hasExistingModule ? 'Proxy' : ''}Module`;
-				const modulePath = `${getOutDir(options, element.tagName)}/${strings.dasherize(baseName)}${hasExistingModule ? '-proxy' : ''}.module`;
-				agg[element.tagName] = { hasExistingModule, moduleName, modulePath };
+				const relativePath = `..${getOutDir(options, element.tagName, {relative: true})}/${strings.dasherize(baseName)}${hasExistingModule ? '-proxy' : ''}.module`;
+				agg[element.tagName] = { hasExistingModule, moduleName, relativePath };
 				return agg;
 			},
-			{} as Record<string, { hasExistingModule: boolean; moduleName: string; modulePath: string; }>
+			{} as Record<string, { hasExistingModule: boolean; moduleName: string; relativePath: string; }>
 		);
 
 		context.logger.info(`Generating modules for ${customElementsWithTags.length} components.`);
