@@ -1,3 +1,19 @@
+# v1.3.0 (Wed Mar 22 2023)
+
+#### 🚀 Enhancement
+
+- feat: update generated modules, re-export dependencies [#5](https://github.com/tyler-technologies-oss/forge-schematics/pull/5) ([@MikeMatusz](https://github.com/MikeMatusz))
+
+#### 🐛 Bug Fix
+
+- fix: imports for module define [#4](https://github.com/tyler-technologies-oss/forge-schematics/pull/4) ([@MikeMatusz](https://github.com/MikeMatusz))
+
+#### Authors: 1
+
+- Mike Matuszak ([@MikeMatusz](https://github.com/MikeMatusz))
+
+---
+
 # v1.2.0 (Mon Mar 13 2023)
 
 #### 🐛 Bug Fix
