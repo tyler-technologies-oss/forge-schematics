@@ -27,6 +27,7 @@ This will generate a folder for each custom element matching the tag name in the
 * `--exclude` accepts a comma-delimited list of tag names and will not generate proxy components for the corresponding web components
 * `--modulePrefix` supplies an optional prefix for the NgModule name
 * `--useDefineFunction` will use a library-provided `define*Component()` function instead of `window.customElements.define()`
+* `--standalone` generates standalone components without associated NgModules
 
 ## Migration Notes
 
