@@ -6,6 +6,7 @@ import {
 	move,
 	Rule,
 	SchematicContext,
+	Source,
 	strings,
 	template,
 	Tree,
@@ -43,56 +44,75 @@ export function customElements(inputOptions: IOptions): Rule {
 		context.logger.debug(`Elements to generate components for: ${customElementsWithTags.map(x => x.tagName).toString()}`);
 
 		// TODO: Don't generate @Input for @FoundationProperty({set: false}) (not indicated by metadata)
-		const sources = customElementsWithTags.map(element => apply(url('./files/component'), [
-			template({
-				...element,
-				baseName: toBaseName(element.name),
-				importPath: options.importPath,
-				useDefineFunction: options.useDefineFunction,
-				methods: element.members?.filter(x => x.kind === 'method' && x.privacy === 'public') ?? [],
-				properties: element.members?.filter(x => x.kind === 'field' && x.privacy === 'public') ?? [],
-				attributes: element.attributes ?? [],
-				events: element.events ?? [],
-				...strings,
-				toJsDocBlock
-			}),
-			move(getOutDir(options, element.tagName))
-		]));
+		const sources = customElementsWithTags.map(element => {
+			const dependencies = options.standalone
+				? options.componentDependencies?.[element.tagName]
+					?.map(tag => customElementsWithTags.find(el => el.tagName === tag))
+					.filter(dep => !!dep)
+					.map(dep => {
+						const dashifiedName = strings.dasherize(toBaseName(dep!.name));
+						return { ...dep, relativePath: `..${getOutDir(options, dep!.tagName, {relative: true})}/${dashifiedName}.component` };
+					})
+				: undefined;
+			return apply(url('./files/component'), [
+				template({
+					...element,
+					baseName: toBaseName(element.name),
+					standalone: options.standalone,
+					dependencies: dependencies ?? [],
+					importPath: options.importPath,
+					useDefineFunction: options.useDefineFunction,
+					methods: element.members?.filter(x => x.kind === 'method' && x.privacy === 'public') ?? [],
+					properties: element.members?.filter(x => x.kind === 'field' && x.privacy === 'public') ?? [],
+					attributes: element.attributes ?? [],
+					events: element.events ?? [],
+					...strings,
+					toJsDocBlock
+				}),
+				move(getOutDir(options, element.tagName))
+			])
+		});
 
-		const elementMap = customElementsWithTags.reduce(
-			(agg, element) => {
-				const hasExistingModule = moduleExists(tree, getOutDir(options, element.tagName));
-				const baseName = toBaseName(element.name);
-				const moduleName = `${options.modulePrefix}${baseName}${hasExistingModule ? 'Proxy' : ''}Module`;
-				const relativePath = `..${getOutDir(options, element.tagName, {relative: true})}/${strings.dasherize(baseName)}${hasExistingModule ? '-proxy' : ''}.module`;
-				agg[element.tagName] = { hasExistingModule, moduleName, relativePath };
-				return agg;
-			},
-			{} as Record<string, { hasExistingModule: boolean; moduleName: string; relativePath: string; }>
-		);
+		let moduleSources: Source[] = [];
+		if (!options.standalone) {
+			const elementMap = customElementsWithTags.reduce(
+				(agg, element) => {
+					const hasExistingModule = moduleExists(tree, getOutDir(options, element.tagName));
+					const baseName = toBaseName(element.name);
+					const moduleName = `${options.modulePrefix}${baseName}${hasExistingModule ? 'Proxy' : ''}Module`;
+					const relativePath = `..${getOutDir(options, element.tagName, {relative: true})}/${strings.dasherize(baseName)}${hasExistingModule ? '-proxy' : ''}.module`;
+					agg[element.tagName] = { hasExistingModule, moduleName, relativePath };
+					return agg;
+				},
+				{} as Record<string, { hasExistingModule: boolean; moduleName: string; relativePath: string; }>
+			);
 
-		context.logger.info(`Generating modules for ${customElementsWithTags.length} components.`);
-		const moduleSources = customElementsWithTags.map(element => apply(url('./files/module '), [
-			template({
-				...element,
-				...strings,
-				baseName: toBaseName(element.name),
-				moduleName: elementMap[element.tagName].moduleName,
-				dependencies: options.componentDependencies?.[element.tagName]?.map(tag => elementMap[tag]) ?? [],
-				importPath: options.importPath,
-				useDefineFunction: options.useDefineFunction
-			}),
-			(tree: Tree): Tree => {
-				const moduleInfo = elementMap[element.tagName];
-				if (moduleInfo.hasExistingModule) {
-					const fileName = strings.dasherize(toBaseName(element.name));
-					context.logger.debug(`Generating: ${fileName}-proxy.module.ts because a non-generated ${fileName}.module.ts already exists.`);
-					tree.rename(`${fileName}.module.ts`, `${fileName}-proxy.module.ts`)
-				}
-				return tree;
-			},
-			move(getOutDir(options, element.tagName)),
-		]));
+			context.logger.info(`Generating modules for ${customElementsWithTags.length} components.`);
+
+			moduleSources = customElementsWithTags.map(element => apply(url('./files/module '), [
+				template({
+					...element,
+					...strings,
+					baseName: toBaseName(element.name),
+					moduleName: elementMap[element.tagName].moduleName,
+					dependencies: options.componentDependencies?.[element.tagName]?.map(tag => elementMap[tag]) ?? [],
+					importPath: options.importPath,
+					useDefineFunction: options.useDefineFunction
+				}),
+				(tree: Tree): Tree => {
+					const moduleInfo = elementMap[element.tagName];
+					if (moduleInfo.hasExistingModule) {
+						const fileName = strings.dasherize(toBaseName(element.name));
+						context.logger.debug(`Generating: ${fileName}-proxy.module.ts because a non-generated ${fileName}.module.ts already exists.`);
+						tree.rename(`${fileName}.module.ts`, `${fileName}-proxy.module.ts`)
+					}
+					return tree;
+				},
+				move(getOutDir(options, element.tagName)),
+			]));
+		} else {
+			context.logger.info(`Skipping modules because generated components are standalone.`);
+		}
 
 		// TODO (3.0): Update existing non-generated modules to ensure proxy module in declarations and exports.
 

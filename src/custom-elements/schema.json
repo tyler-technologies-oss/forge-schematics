@@ -61,6 +61,11 @@
 							"type": "string"
 						}
 					}
+				},
+				"standalone": {
+					"type": "boolean",
+					"description": "option to generate standalone components without NgModules",
+					"x-prompt": "Should the proxy components be generated as standalone?"
 				}
 			},
 			"required": ["manifest", "importPath"]

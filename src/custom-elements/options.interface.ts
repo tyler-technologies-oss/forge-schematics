@@ -11,5 +11,6 @@ export interface ICliOptions {
 	exclude: string;
 	modulePrefix: string;
 	useDefineFunction: boolean;
+	standalone: boolean;
 }
 export type IOptions = IConfigOptions | ICliOptions;

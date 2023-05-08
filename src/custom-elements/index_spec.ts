@@ -13,7 +13,8 @@ function defaultOptions(): IOptions {
     outDir: '',
     outDirExcludePrefix: '',
     modulePrefix: '',
-    useDefineFunction: false
+    useDefineFunction: false,
+    standalone: false
   };
 }
 
