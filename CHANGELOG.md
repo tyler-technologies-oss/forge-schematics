@@ -1,3 +1,15 @@
+# v1.3.1 (Tue Feb 06 2024)
+
+#### 🐛 Bug Fix
+
+- fix: don't generate inputs for readonly properties, expose nativeElement [#8](https://github.com/tyler-technologies-oss/forge-schematics/pull/8) ([@MikeMatusz](https://github.com/MikeMatusz))
+
+#### Authors: 1
+
+- Mike Matuszak ([@MikeMatusz](https://github.com/MikeMatusz))
+
+---
+
 # v1.3.0 (Wed Mar 22 2023)
 
 #### 🚀 Enhancement
