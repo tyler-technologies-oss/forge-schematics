@@ -42,7 +42,6 @@ export function customElements(inputOptions: IOptions): Rule {
 
 		context.logger.debug(`Elements to generate components for: ${customElementsWithTags.map(x => x.tagName).toString()}`);
 
-		// TODO: Don't generate @Input for @FoundationProperty({set: false}) (not indicated by metadata)
 		const sources = customElementsWithTags.map(element => apply(url('./files/component'), [
 			template({
 				...element,

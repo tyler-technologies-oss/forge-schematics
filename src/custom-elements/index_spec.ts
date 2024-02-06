@@ -130,6 +130,59 @@ describe('custom-elements', () => {
     expect(moduleFile).toContain(`window.customElements.define('forge-accordion', AccordionComponentCustomElement);`);
   });
 
+  it('should not generate inputs for readonly properties', async () => {
+    const runner = new SchematicTestRunner('schematics', collectionPath);
+    const tree = await runner
+      .runSchematicAsync<IOptions>('custom-elements', {
+        ...defaultOptions()
+      }, Tree.empty())
+      .toPromise();
+
+    const componentFile = tree.readContent(tree.files[2]);
+    expect(componentFile).toContain(`public get testReadonlyProperty`);
+    expect(componentFile).not.toContain(`public set testReadonlyProperty`);
+  });
+
+  it('should import and use booleanAttribute/numberAttribute transforms for @Input() properties ', async () => {
+    const runner = new SchematicTestRunner('schematics', collectionPath);
+    const tree = await runner
+      .runSchematicAsync<IOptions>('custom-elements', {
+        ...defaultOptions()
+      }, Tree.empty())
+      .toPromise();
+
+    const componentFile = tree.readContent(tree.files[2]);
+    expect(componentFile).toMatch(/import { [\w\s,]*booleanAttribute[\w\s,]* } from '@angular\/core';/);
+    expect(componentFile).toMatch(/import { [\w\s,]*numberAttribute[\w\s,]* } from '@angular\/core';/);
+    expect(componentFile).toMatch(/@Input\({ transform: booleanAttribute }\)[\r\n\s]*public set open/m);
+    expect(componentFile).toMatch(/@Input\({ transform: numberAttribute }\)[\r\n\s]*public set testNumber/m);
+  });
+
+  it('should not import booleanAttribute/numberAttribute if no usages ', async () => {
+    const runner = new SchematicTestRunner('schematics', collectionPath);
+    const tree = await runner
+      .runSchematicAsync<IOptions>('custom-elements', {
+        ...defaultOptions()
+      }, Tree.empty())
+      .toPromise();
+
+    const componentFile = tree.readContent(tree.files[0]);
+    expect(componentFile).not.toMatch(/import { [\w\s,]*booleanAttribute[\w\s,]* } from '@angular\/core';/);
+    expect(componentFile).not.toMatch(/import { [\w\s,]*numberAttribute[\w\s,]* } from '@angular\/core';/);
+  });
+
+  it('should generate components that expose the native element with tag name in description ', async () => {
+    const runner = new SchematicTestRunner('schematics', collectionPath);
+    const tree = await runner
+      .runSchematicAsync<IOptions>('custom-elements', {
+        ...defaultOptions()
+      }, Tree.empty())
+      .toPromise();
+
+    const componentFile = tree.readContent(tree.files[2]);
+    expect(componentFile).toMatch(/\/\*\* The forge-expansion-panel element. \*\/[\r\n\s]*public readonly nativeElement = this.elementRef.nativeElement;/m);
+  });
+
   it('should use the library define function if useDefineFunction is true', async () => {
     const runner = new SchematicTestRunner('schematics', collectionPath);
     const tree = await runner

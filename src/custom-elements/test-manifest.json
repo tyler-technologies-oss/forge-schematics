@@ -133,6 +133,25 @@
                   "description": "Gets/sets if animations are used in the expand/collapse transition."
                 },
                 {
+                  "kind": "field",
+                  "name": "testNumber",
+                  "type": {
+                    "text": "number"
+                  },
+                  "privacy": "public",
+                  "description": "Gets/sets a numeric value."
+                },
+                {
+                  "kind": "field",
+                  "name": "testReadonlyProperty",
+                  "type": {
+                    "text": "boolean"
+                  },
+                  "privacy": "public",
+                  "readonly": true,
+                  "description": "Gets without a setter"
+                },
+                {
                   "kind": "method",
                   "name": "toggle",
                   "privacy": "public",
