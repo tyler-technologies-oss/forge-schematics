@@ -1,3 +1,33 @@
+# v2.0.0 (Thu Jun 05 2025)
+
+:tada: This release contains work from new contributors! :tada:
+
+Thanks for all your work!
+
+:heart: null[@Ross-Blakeney](https://github.com/Ross-Blakeney)
+
+:heart: Joe Nunnelley ([@JoeNunnelley](https://github.com/JoeNunnelley))
+
+#### 💥 Breaking Change
+
+- fix: auto version matching needed to be updated whe auto was updated [#18](https://github.com/tyler-technologies-oss/forge-schematics/pull/18) ([@Ross-Blakeney](https://github.com/Ross-Blakeney))
+- chore: update tooling to ng19 [#17](https://github.com/tyler-technologies-oss/forge-schematics/pull/17) ([@Ross-Blakeney](https://github.com/Ross-Blakeney))
+
+#### 🐛 Bug Fix
+
+- Security Code Scanning - configuration files [#14](https://github.com/tyler-technologies-oss/forge-schematics/pull/14) ([@JoeNunnelley](https://github.com/JoeNunnelley) [@Ross-Blakeney](https://github.com/Ross-Blakeney))
+- Dependency reviewer [#11](https://github.com/tyler-technologies-oss/forge-schematics/pull/11) ([@JoeNunnelley](https://github.com/JoeNunnelley))
+- chore: update workflows [#10](https://github.com/tyler-technologies-oss/forge-schematics/pull/10) ([@DRiFTy17](https://github.com/DRiFTy17))
+- fix: update Auto to fix release error [#9](https://github.com/tyler-technologies-oss/forge-schematics/pull/9) ([@DRiFTy17](https://github.com/DRiFTy17))
+
+#### Authors: 3
+
+- [@Ross-Blakeney](https://github.com/Ross-Blakeney)
+- Joe Nunnelley ([@JoeNunnelley](https://github.com/JoeNunnelley))
+- Kieran Nichols ([@DRiFTy17](https://github.com/DRiFTy17))
+
+---
+
 # v1.3.1 (Tue Feb 06 2024)
 
 #### 🐛 Bug Fix
