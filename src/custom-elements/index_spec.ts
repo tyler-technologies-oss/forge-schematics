@@ -212,4 +212,22 @@ describe('custom-elements', () => {
     expect(accordionModuleFile).toContain(`exports: [AccordionComponent, ForgeExpansionPanelModule]`);
   });
 
+  it('should inject providers and allow access to nativeElement, zone, and changeDetectorRef', async () => {
+    const runner = new SchematicTestRunner('schematics', collectionPath);
+    const tree = await runner.runSchematic<IOptions>('custom-elements', defaultOptions(), Tree.empty());
+    const componentFile = tree.readContent(tree.files[0]);
+
+    expect(componentFile).toMatch(/protected elementRef = inject<ElementRef<AccordionComponentCustomElement>>\(ElementRef\)/);
+    expect(componentFile).toMatch(/protected zone = inject\(NgZone\)/);
+    expect(componentFile).toMatch(/const changeDetectorRef = inject\(ChangeDetectorRef\)/);
+    expect(componentFile).toMatch(/public readonly nativeElement = this\.elementRef\.nativeElement/);
+  });
+
+  it('should generate components that are not standalone', async () => {
+    const runner = new SchematicTestRunner('schematics', collectionPath);
+    const tree = await runner.runSchematic<IOptions>('custom-elements', defaultOptions(), Tree.empty());
+    const componentFile = tree.readContent(tree.files[0]);
+    expect(componentFile).toMatch(/standalone:\s*false/);
+  });
+
 });
