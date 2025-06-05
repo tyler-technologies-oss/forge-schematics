@@ -9,11 +9,11 @@ on:
     branches:
       - main
     paths:
-      - '.github/workflows/**/*'
-      - 'auto.config.ts'
-      - 'package.json'
-      - 'tsconfig.json'
-      - 'src/**/*'
+      - ".github/workflows/**/*"
+      - "auto.config.ts"
+      - "package.json"
+      - "tsconfig.json"
+      - "src/**/*"
   workflow_dispatch:
 
 concurrency: build-release-${{ github.ref }}
@@ -91,7 +91,7 @@ jobs:
   build:
     name: Build
     needs: wf-config
-    uses: tyler-technologies-oss/forge-automation-shared/.github/workflows/wf-build-and-test.yml@v2.8.1
+    uses: tyler-technologies-oss/forge-automation-shared/.github/workflows/wf-build-and-test.yml@v2.10.3
     if: ${{ needs.wf-config.outputs.is-release == 'false' && needs.wf-config.outputs.build-files-changed == 'true' }}
     with:
       BUILD_ENABLED: ${{ needs.wf-config.outputs.build-files-changed == 'true' }}
@@ -101,7 +101,7 @@ jobs:
   build-and-release:
     name: Build and Release
     needs: wf-config
-    uses: tyler-technologies-oss/forge-automation-shared/.github/workflows/wf-build-release.yml@v2.8.1
+    uses: tyler-technologies-oss/forge-automation-shared/.github/workflows/wf-build-release.yml@v2.10.3
     if: ${{ needs.wf-config.outputs.is-release == 'true' }}
     with:
       PRODUCTION_RELEASE: true

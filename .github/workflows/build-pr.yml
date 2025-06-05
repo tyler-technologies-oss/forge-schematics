@@ -3,11 +3,11 @@ name: Build Pull Request
 on:
   pull_request:
     paths:
-      - 'auto.config.ts'
-      - 'package.json'
-      - 'tsconfig.json'
-      - '.github/workflows/**/*'
-      - 'src/**/*'
+      - "auto.config.ts"
+      - "package.json"
+      - "tsconfig.json"
+      - ".github/workflows/**/*"
+      - "src/**/*"
 
 jobs:
   wf-config:
@@ -27,9 +27,9 @@ jobs:
   build:
     name: Build and Test
     needs: wf-config
-    uses: tyler-technologies-oss/forge-automation-shared/.github/workflows/wf-build-and-test.yml@v2.8.1
+    uses: tyler-technologies-oss/forge-automation-shared/.github/workflows/wf-build-and-test.yml@v2.10.3
     with:
       TESTS_ENABLED: ${{ needs.wf-config.outputs.test-files-changed == 'true' }}
-      TESTS_NPM_SCRIPT: 'test'
+      TESTS_NPM_SCRIPT: "test"
     secrets:
       NPM_TOKEN: ${{ secrets.FORGE_NPM_TOKEN }}
