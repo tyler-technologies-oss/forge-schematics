@@ -10,40 +10,40 @@ import { <%= name %> as <%= name %>CustomElement<% if (useDefineFunction) { %>, 
   standalone: false
 })
 export class <%= name %> {
-  protected elementRef = inject<ElementRef<<%= name %>CustomElement>>(ElementRef);
-  protected zone = inject(NgZone);
+	protected elementRef = inject<ElementRef<<%= name %>CustomElement>>(ElementRef);
+	protected zone = inject(NgZone);
 
-  /** The <%= tagName %> element. */
-  public readonly nativeElement = this.elementRef.nativeElement;
+	/** The <%= tagName %> element. */
+	public readonly nativeElement = this.elementRef.nativeElement;
 <% for (let property of properties) { %>
 <% if (property.description) { %><%= toJsDocBlock(property.description, 1) %><% } %>
 <% if (!property.readonly) {
-%>  @Input(<% if (property.type?.text === 'boolean') { %>{ transform: booleanAttribute }<% } else if (property.type?.text === 'number') { %>{ transform: numberAttribute }<% } %>)
-  public set <%= property.name %>(value: <%= name %>CustomElement['<%= property.name %>']) {
-    this.zone.runOutsideAngular(() => {
-      this.nativeElement.<%= property.name %> = value;
-    });
-  }
+%>	@Input(<% if (property.type?.text === 'boolean') { %>{ transform: booleanAttribute }<% } else if (property.type?.text === 'number') { %>{ transform: numberAttribute }<% } %>)
+	public set <%= property.name %>(value: <%= name %>CustomElement['<%= property.name %>']) {
+		this.zone.runOutsideAngular(() => {
+			this.nativeElement.<%= property.name %> = value;
+		});
+	}
 <%
-}%>  public get <%= property.name %>(): <%= name %>CustomElement['<%= property.name %>'] {
-    return this.nativeElement.<%= property.name %>;
-  }
+}%>	public get <%= property.name %>(): <%= name %>CustomElement['<%= property.name %>'] {
+		return this.nativeElement.<%= property.name %>;
+	}
 <% } %><% for (let method of methods) { %>
 <% if (method.description) { %><%= toJsDocBlock(method.description, 1) %><% } %>
-  public <%= method.name %>(...args: Parameters<<%= name %>CustomElement['<%= method.name %>']>): ReturnType<<%= name %>CustomElement['<%= method.name %>']> {
-    return this.zone.runOutsideAngular(() => this.nativeElement.<%= method.name %>(...args));
-  }
+	public <%= method.name %>(...args: Parameters<<%= name %>CustomElement['<%= method.name %>']>): ReturnType<<%= name %>CustomElement['<%= method.name %>']> {
+		return this.zone.runOutsideAngular(() => this.nativeElement.<%= method.name %>(...args));
+	}
 <% } %>
-  constructor() {
-    <% if (useDefineFunction) {
-      // Forge FloatingActionButton doesn't currently have Component suffix, but define function does.
-      %>define<%= name.endsWith('Component') ? name : `${name}Component` %>();<%
-    } else {
-      %>if (!window.customElements.get('<%= tagName %>')) {
-        window.customElements.define('<%= tagName %>', <%= name %>CustomElement);
-      }<%
-    } %>
-    const changeDetectorRef = inject(ChangeDetectorRef);
-    changeDetectorRef.detach();
-  }
+	constructor() {
+		<% if (useDefineFunction) {
+			// Forge FloatingActionButton doesn't currently have Component suffix, but define function does.
+			%>define<%= name.endsWith('Component') ? name : `${name}Component` %>();<%
+		} else {
+			%>if (!window.customElements.get('<%= tagName %>')) {
+				window.customElements.define('<%= tagName %>', <%= name %>CustomElement);
+			}<%
+		} %>
+		const changeDetectorRef = inject(ChangeDetectorRef);
+		changeDetectorRef.detach();
+	}
 }
