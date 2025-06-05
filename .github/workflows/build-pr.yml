@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check File Changes
-        uses: dorny/paths-filter@v2
+        uses: dorny/paths-filter@v3
         id: file-filter
         with:
           filters: |
