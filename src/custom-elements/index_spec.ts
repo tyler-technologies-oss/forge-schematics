@@ -21,8 +21,7 @@ describe('custom-elements', () => {
   it('should generate a component and module for each element in a folder matching the tag name', async () => {
     const runner = new SchematicTestRunner('schematics', collectionPath);
     const tree = await runner
-      .runSchematicAsync<IOptions>('custom-elements', defaultOptions(), Tree.empty())
-      .toPromise();
+      .runSchematic<IOptions>('custom-elements', defaultOptions(), Tree.empty());
 
     expect(tree.files).toEqual([
       '/forge-accordion/accordion.component.ts',
@@ -38,8 +37,7 @@ describe('custom-elements', () => {
     const startingTree = Tree.empty();
     startingTree.create('forge-accordion/accordion.module.ts', oldGeneratedFileContent);
     const tree = await runner
-      .runSchematicAsync<IOptions>('custom-elements', defaultOptions(), startingTree)
-      .toPromise();
+      .runSchematic<IOptions>('custom-elements', defaultOptions(), startingTree);
 
     expect(tree.files).toEqual(jasmine.arrayContaining([
       '/forge-accordion/accordion.component.ts',
@@ -54,8 +52,7 @@ describe('custom-elements', () => {
     const nonGeneratedContent = 'test';
     startingTree.create('forge-accordion/accordion.module.ts', nonGeneratedContent);
     const tree = await runner
-      .runSchematicAsync<IOptions>('custom-elements', defaultOptions(), startingTree)
-      .toPromise();
+      .runSchematic<IOptions>('custom-elements', defaultOptions(), startingTree);
 
     expect(tree.files).toEqual(jasmine.arrayContaining([
       '/forge-accordion/accordion.component.ts',
@@ -69,11 +66,10 @@ describe('custom-elements', () => {
   it('should generate the folders in the outDir if specified', async () => {
     const runner = new SchematicTestRunner('schematics', collectionPath);
     const tree = await runner
-      .runSchematicAsync<IOptions>('custom-elements', {
+      .runSchematic<IOptions>('custom-elements', {
         ...defaultOptions(),
         outDir: 'test'
-      }, Tree.empty())
-      .toPromise();
+      }, Tree.empty());
 
     expect(tree.files).toEqual([
       '/test/forge-accordion/accordion.component.ts',
@@ -86,11 +82,10 @@ describe('custom-elements', () => {
   it('should omit the forge prefix from the folder if outDirExcludePrefix is specified', async () => {
     const runner = new SchematicTestRunner('schematics', collectionPath);
     const tree = await runner
-      .runSchematicAsync<IOptions>('custom-elements', {
+      .runSchematic<IOptions>('custom-elements', {
         ...defaultOptions(),
         outDirExcludePrefix: 'forge-',
-      }, Tree.empty())
-      .toPromise();
+      }, Tree.empty());
 
     expect(tree.files).toEqual([
       '/accordion/accordion.component.ts',
@@ -103,11 +98,10 @@ describe('custom-elements', () => {
   it('should generate exclude a component by tag name', async () => {
     const runner = new SchematicTestRunner('schematics', collectionPath);
     const tree = await runner
-      .runSchematicAsync<IOptions>('custom-elements', {
+      .runSchematic<IOptions>('custom-elements', {
         ...defaultOptions(),
         exclude: 'forge-accordion, forge-expansion-panel'
-      }, Tree.empty())
-      .toPromise();
+      }, Tree.empty());
 
     expect(tree.files).toEqual([]);
   });
@@ -115,11 +109,10 @@ describe('custom-elements', () => {
   it('should use the built-in customElements.define function if useDefineFunction is false', async () => {
     const runner = new SchematicTestRunner('schematics', collectionPath);
     const tree = await runner
-      .runSchematicAsync<IOptions>('custom-elements', {
+      .runSchematic<IOptions>('custom-elements', {
         ...defaultOptions(),
         useDefineFunction: false
-      }, Tree.empty())
-      .toPromise();
+      }, Tree.empty());
 
     const componentFile = tree.readContent(tree.files[0]);
     const moduleFile = tree.readContent(tree.files[1]);
@@ -133,10 +126,9 @@ describe('custom-elements', () => {
   it('should not generate inputs for readonly properties', async () => {
     const runner = new SchematicTestRunner('schematics', collectionPath);
     const tree = await runner
-      .runSchematicAsync<IOptions>('custom-elements', {
+      .runSchematic<IOptions>('custom-elements', {
         ...defaultOptions()
-      }, Tree.empty())
-      .toPromise();
+      }, Tree.empty());
 
     const componentFile = tree.readContent(tree.files[2]);
     expect(componentFile).toContain(`public get testReadonlyProperty`);
@@ -146,10 +138,9 @@ describe('custom-elements', () => {
   it('should import and use booleanAttribute/numberAttribute transforms for @Input() properties ', async () => {
     const runner = new SchematicTestRunner('schematics', collectionPath);
     const tree = await runner
-      .runSchematicAsync<IOptions>('custom-elements', {
+      .runSchematic<IOptions>('custom-elements', {
         ...defaultOptions()
-      }, Tree.empty())
-      .toPromise();
+      }, Tree.empty());
 
     const componentFile = tree.readContent(tree.files[2]);
     expect(componentFile).toMatch(/import { [\w\s,]*booleanAttribute[\w\s,]* } from '@angular\/core';/);
@@ -161,10 +152,9 @@ describe('custom-elements', () => {
   it('should not import booleanAttribute/numberAttribute if no usages ', async () => {
     const runner = new SchematicTestRunner('schematics', collectionPath);
     const tree = await runner
-      .runSchematicAsync<IOptions>('custom-elements', {
+      .runSchematic<IOptions>('custom-elements', {
         ...defaultOptions()
-      }, Tree.empty())
-      .toPromise();
+      }, Tree.empty());
 
     const componentFile = tree.readContent(tree.files[0]);
     expect(componentFile).not.toMatch(/import { [\w\s,]*booleanAttribute[\w\s,]* } from '@angular\/core';/);
@@ -174,10 +164,9 @@ describe('custom-elements', () => {
   it('should generate components that expose the native element with tag name in description ', async () => {
     const runner = new SchematicTestRunner('schematics', collectionPath);
     const tree = await runner
-      .runSchematicAsync<IOptions>('custom-elements', {
+      .runSchematic<IOptions>('custom-elements', {
         ...defaultOptions()
-      }, Tree.empty())
-      .toPromise();
+      }, Tree.empty());
 
     const componentFile = tree.readContent(tree.files[2]);
     expect(componentFile).toMatch(/\/\*\* The forge-expansion-panel element. \*\/[\r\n\s]*public readonly nativeElement = this.elementRef.nativeElement;/m);
@@ -186,11 +175,10 @@ describe('custom-elements', () => {
   it('should use the library define function if useDefineFunction is true', async () => {
     const runner = new SchematicTestRunner('schematics', collectionPath);
     const tree = await runner
-      .runSchematicAsync<IOptions>('custom-elements', {
+      .runSchematic<IOptions>('custom-elements', {
         ...defaultOptions(),
         useDefineFunction: true
-      }, Tree.empty())
-      .toPromise();
+      }, Tree.empty());
 
     const componentFile = tree.readContent(tree.files[0]);
     const moduleFile = tree.readContent(tree.files[1]);
@@ -203,8 +191,7 @@ describe('custom-elements', () => {
   it('should accept a config file rather than individual arguments', async () => {
     const runner = new SchematicTestRunner('schematics', collectionPath);
     const tree = await runner
-      .runSchematicAsync<IOptions>('custom-elements', { config: 'src/custom-elements/test-config.json' }, Tree.empty())
-      .toPromise();
+      .runSchematic<IOptions>('custom-elements', { config: 'src/custom-elements/test-config.json' }, Tree.empty());
 
     expect(tree.files).toEqual([
       '/test/accordion/accordion.component.ts',
@@ -217,8 +204,7 @@ describe('custom-elements', () => {
   it('should accept a map of dependencies and generate imports/exports in the module', async () => {
     const runner = new SchematicTestRunner('schematics', collectionPath);
     const tree = await runner
-      .runSchematicAsync<IOptions>('custom-elements', { config: 'src/custom-elements/test-config.json' }, Tree.empty())
-      .toPromise();
+      .runSchematic<IOptions>('custom-elements', { config: 'src/custom-elements/test-config.json' }, Tree.empty());
 
     const accordionModuleFile = tree.readContent(tree.files[1]);
     expect(accordionModuleFile).toContain(`import { ForgeExpansionPanelModule } from '../expansion-panel/expansion-panel.module';`);
